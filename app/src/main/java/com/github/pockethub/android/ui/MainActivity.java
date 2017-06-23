@@ -97,7 +97,7 @@ public class MainActivity extends BaseActivity implements
     @Inject
     private AvatarLoader avatars;
     private DrawerLayout drawerLayout;
-    private boolean userLearnedDrawer;
+    private boolean userLearnedDrawer = true;
     private Toolbar toolbar;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
@@ -105,13 +105,6 @@ public class MainActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        userLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-        if(sp.getBoolean(PREF_FIRST_USE, true)) {
-            openWelcomeScreen();
-        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -124,13 +117,6 @@ public class MainActivity extends BaseActivity implements
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-
-                if (!userLearnedDrawer) {
-                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                    userLearnedDrawer = true;
-                    Log.d(TAG, "User learned drawer");
-                }
             }
         };
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -154,10 +140,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    private void openWelcomeScreen() {
-        startActivity(new Intent(this, WelcomeActivity.class));
-        finish();
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
